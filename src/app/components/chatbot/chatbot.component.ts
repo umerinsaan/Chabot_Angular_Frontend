@@ -1,5 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { Message } from 'src/app/models/Message';
+import { ChatbotService } from 'src/app/services/chatbot.service';
 import { SpeechRecognitionService } from 'src/app/services/speech-recognition.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { SpeechRecognitionService } from 'src/app/services/speech-recognition.se
   styleUrls: ['./chatbot.component.css']
 })
 export class ChatbotComponent {
-  constructor(private speechRecognitionService: SpeechRecognitionService, private ngZone: NgZone) { }
+  constructor(private speechRecognitionService: SpeechRecognitionService, private ngZone: NgZone, private chatBotService: ChatbotService) { }
 
   messages: Message[] = [];
   question: string = '';
@@ -82,8 +83,27 @@ export class ChatbotComponent {
     this.speechRecognitionService.stopListening();
   }
 
-  askQuestion(){
-    
-  }
+  askQuestion() {
+    if (this.question.length === 0) return;
 
+    const req: string = this.question;
+    this.messages.push({
+      sender: 'user',
+      value: req
+    });
+
+    this.question = '';
+
+    this.chatBotService.sendQuestionAndGetAnswer({
+      sender: 'bot',
+      value: req
+    }).subscribe({
+      next: (response) => {
+        this.messages.push(response);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
 }
