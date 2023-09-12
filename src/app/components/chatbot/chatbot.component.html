@@ -1,0 +1,39 @@
+<div id="chatbot-container">
+
+    <div #MessagesContainer id="messages-container">
+
+        <div class="message-container" *ngFor="let message of messages;"
+            [ngClass]="{'right': message.sender === 'user', 'left': message.sender === 'bot'}">
+            {{message.value}}
+            <div></div>
+        </div>
+
+    </div>
+
+    <div id="message-input-container">
+
+        <button class="input-btn left-input-btn" (click)="toggleListening()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+            </svg>
+        </button>
+
+        <textarea #MessageInputField type="text" name="" id="message-input-field" placeholder="Type a text"
+            (input)="textAreaResize(MessageInputField)" [(ngModel)] = "question"></textarea>
+
+        <button class="input-btn right-input-btn">
+            <svg id="send-btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+            </svg>
+        </button>
+
+    </div>
+
+</div>
+
+<button (click)="addUserMessage(MessagesContainer)">Add User Message</button>
+<button (click)="addBotMessage(MessagesContainer)">Add Bot Message</button>
