@@ -2,6 +2,7 @@ import { Component, NgZone, ElementRef, AfterViewInit } from '@angular/core';
 import { Message } from 'src/app/models/Message';
 import { ChatbotService } from 'src/app/services/chatbot.service';
 import { SpeechRecognitionService } from 'src/app/services/speech-recognition.service';
+import { TextToSpeechService } from 'src/app/services/text-to-speech.service';
 
 @Component({
   selector: 'app-chatbot',
@@ -13,7 +14,8 @@ export class ChatbotComponent implements AfterViewInit {
     private speechRecognitionService: SpeechRecognitionService,
     private ngZone: NgZone,
     private chatBotService: ChatbotService,
-    private elementRef: ElementRef<HTMLDivElement | HTMLTextAreaElement>
+    private elementRef: ElementRef<HTMLDivElement | HTMLTextAreaElement>,
+    private textToSpeechService: TextToSpeechService
   ) { }
 
   textAreaElement!: HTMLTextAreaElement;
@@ -59,7 +61,7 @@ export class ChatbotComponent implements AfterViewInit {
 
     const maxHeight = parseInt(getComputedStyle(this.textAreaElement).maxHeight, 10);
 
-    this.textAreaElement.style.height = "2rem";
+    this.textAreaElement.style.height = "2.5rem";
     this.textAreaElement.style.height = (this.textAreaElement.scrollHeight) + "px";
 
     if (this.textAreaElement.scrollHeight > maxHeight) {
@@ -93,13 +95,20 @@ export class ChatbotComponent implements AfterViewInit {
       (text: string) => {
         this.ngZone.run(() => {
           this.question = text;
-          this.stopListening();
+          this.toggleListening();
         });
       },
       (error) => {
         console.log(error);
+        this.ngZone.run(() => {
+          this.toggleListening();
+        })
+      },
+      () => {
+        this.ngZone.run(() => {
+          this.toggleListening();
+        })
       }
-
     );
   }
 
@@ -108,14 +117,15 @@ export class ChatbotComponent implements AfterViewInit {
   }
 
   askQuestion() {
-    this.loading = true;
     if (this.question.length === 0) return;
+    this.loading = true;
 
     const req: string = this.question;
     this.messages.push({
       sender: 'user',
       value: req
     });
+    this.showSpeaker.push(false);
 
     this.resetTextAreaSize();
     this.messagesContainerScrollToBottom();
@@ -131,6 +141,7 @@ export class ChatbotComponent implements AfterViewInit {
 
         this.messages.push(response);
         this.messagesContainerScrollToBottom();
+        this.showSpeaker.push(false);
       },
       error: (err) => {
         console.log(err);
@@ -142,4 +153,12 @@ export class ChatbotComponent implements AfterViewInit {
     event.preventDefault();
     this.askQuestion();
   }
+
+  speak(index: number) {
+    const text: string = this.messages[index].value;
+    this.textToSpeechService.speak(text);
+  }
+
+  showSpeaker: boolean[] = [];
+
 }

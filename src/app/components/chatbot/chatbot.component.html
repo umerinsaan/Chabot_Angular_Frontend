@@ -2,9 +2,11 @@
 
     <div #MessagesContainer id="messages-container">
 
-        <div class="message-container" *ngFor="let message of messages;"
-            [ngClass]="{'right': message.sender === 'user', 'left': message.sender === 'bot'}">
+        <div class="message-container" *ngFor="let message of messages; let i = index;"
+            [ngClass]="{'right': message.sender === 'user', 'left': message.sender === 'bot'}"
+            (mouseenter)="showSpeaker[i] = true" (mouseleave)="showSpeaker[i] = false">
             {{message.value}}
+            <span *ngIf="showSpeaker[i]" class="speaker-btn-span" (click)="speak(i)">🔊</span>
         </div>
         <section class="dots-container" *ngIf="loading">
             <div class="dot"></div>
@@ -40,6 +42,3 @@
     </div>
 
 </div>
-
-<button (click)="addUserMessage()">Add User Message</button>
-<button (click)="addBotMessage()">Add Bot Message</button>

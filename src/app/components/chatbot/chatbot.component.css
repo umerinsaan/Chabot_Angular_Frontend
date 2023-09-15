@@ -1,18 +1,19 @@
 #chatbot-container {
-    border: 1px solid black;
+    border: 3px solid blue;
+    box-shadow: 0px -2px 8px 3px blue;
     border-radius: 8px;
-    height: 50rem;
-    width: 40rem;
+    height: 90vh;
+    width: 70vw;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    margin-top: 4rem;
+    margin-top: 2rem;
     overflow: hidden;
     position: relative;
 }
 
 #messages-container {
-    max-height: 92.5%;
+    height: 88%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -21,17 +22,24 @@
 }
 
 .message-container {
-    border: 2px solid purple;
+    border: 2px solid blue;
     padding: 0.5rem;
     border-radius: 8px;
     margin-bottom: 0.5rem;
-    max-width: 30ch;
-    line-height: 20px;
+    max-width: 40ch;
+    line-height: 25px;
     overflow-wrap: break-word;
+    background-color: rgb(3, 32, 61);
+    font-size: 1.5rem;
+    box-shadow: 0px 0px 5px 2px blue;
+    color: white;
+    position: relative;
 }
 
 .left {
     align-self: flex-start;
+    border: 2px solid magenta;
+    box-shadow: 0px 0px 5px 2px magenta;
 }
 
 .right {
@@ -39,16 +47,15 @@
 }
 
 #message-input-container {
-    border-top: 2px solid black;
+    border-top: 1px solid blue;
     width: 100%;
     position: absolute;
     bottom: 5px;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
     gap: 0.5rem;
     padding: 1rem;
-    background-color: white;
+    background-color: rgb(39, 0, 93);
 }
 
 #message-input-field-container {
@@ -58,18 +65,29 @@
 
 #message-input-field {
     font-size: 1.5rem;
-    width: 35ch;
-    padding: 0.25rem 0.5rem;
+    width: 65ch;
+    padding: 0.35rem 0.5rem;
     max-height: 7rem;
     resize: none;
     word-wrap: break-word;
     white-space: pre-wrap;
     overflow-y: hidden;
     scroll-behavior: smooth;
-    outline: none;
-    outline: 1px solid black;
-    height: 2rem;
+    outline: 2px solid blue;
+    border: none;
+    height: 2.5rem;
     border-radius: 8px;
+    background-color: rgb(3, 32, 61);
+    color: rgba(255, 255, 255, 0.9);
+    transition: box-shadow 400ms ease;
+}
+
+#message-input-field::placeholder {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#message-input-field:focus {
+    box-shadow: 0px 0px 5px 3px blue;
 }
 
 .input-btn {
@@ -82,6 +100,7 @@
     cursor: pointer;
     bottom: 50%;
     transform: translateY(50%);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .right-input-btn {
@@ -93,27 +112,28 @@
 }
 
 .listening-animation {
-    animation: listening-animation 1000ms ease 0ms infinite alternate;
+    animation: listening-animation 750ms ease 0ms infinite alternate;
 }
 
 @keyframes listening-animation {
     from {
+        box-shadow: 0px 0px 6px 2px rgb(0, 0, 0, 0);
         background-color: rgb(0, 0, 0, 0);
     }
 
     to {
-        background-color: rgb(0, 0, 0, 0.35);
+        background-color: rgb(0, 0, 0, 0.85);
+        box-shadow: 0px 0px 15px 7px rgb(0, 0, 0, 1);
     }
 }
 
 #send-btn-icon {
-    color: black;
     width: 100%;
 }
 
 .dots-container {
     display: flex;
-    
+    align-self: flex-start;
     height: 100%;
     width: 100%;
 }
@@ -161,4 +181,23 @@
         background-color: #b3d4fc;
         box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
     }
+}
+
+.speaker-btn-span {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar{
+    width: 9px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: rgba(0, 0, 0, 0.719);
+    margin: 0.35em 0;
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgba(255, 255, 255, 0.76);
+    border-radius: 100vw;
 }
