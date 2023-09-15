@@ -5,8 +5,12 @@
         <div class="message-container" *ngFor="let message of messages;"
             [ngClass]="{'right': message.sender === 'user', 'left': message.sender === 'bot'}">
             {{message.value}}
-            <div></div>
         </div>
+        <section class="dots-container" *ngIf="loading">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </section>
 
     </div>
 

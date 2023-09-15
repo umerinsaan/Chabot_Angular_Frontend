@@ -27,6 +27,8 @@ export class ChatbotComponent implements AfterViewInit {
   messages: Message[] = [];
   question: string = '';
 
+  loading: boolean = false;
+
   addUserMessage() {
     this.messages.push({
       sender: 'user',
@@ -106,6 +108,7 @@ export class ChatbotComponent implements AfterViewInit {
   }
 
   askQuestion() {
+    this.loading = true;
     if (this.question.length === 0) return;
 
     const req: string = this.question;
@@ -124,6 +127,8 @@ export class ChatbotComponent implements AfterViewInit {
       value: req
     }).subscribe({
       next: (response) => {
+        this.loading = false;
+
         this.messages.push(response);
         this.messagesContainerScrollToBottom();
       },
