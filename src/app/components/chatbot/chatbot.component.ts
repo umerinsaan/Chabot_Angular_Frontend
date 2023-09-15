@@ -106,4 +106,10 @@ export class ChatbotComponent {
       }
     });
   }
+
+  enterKeyHandler_For_TextAreaElement(event: Event): void {
+    event.preventDefault();
+    console.log("HELLLLO");
+
+  }
 }

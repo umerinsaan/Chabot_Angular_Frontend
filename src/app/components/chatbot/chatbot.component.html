@@ -21,7 +21,8 @@
         </button>
 
         <textarea #MessageInputField type="text" name="" id="message-input-field" placeholder="Type a text"
-            (input)="textAreaResize(MessageInputField)" [(ngModel)] = "question"></textarea>
+            (input)="textAreaResize(MessageInputField)" [(ngModel)]="question"
+            (keydown.enter)="enterKeyHandler_For_TextAreaElement($event)"></textarea>
 
         <button class="input-btn right-input-btn" (click)="askQuestion()">
             <svg id="send-btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

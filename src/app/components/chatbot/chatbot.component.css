@@ -27,6 +27,7 @@
     margin-bottom: 0.5rem;
     max-width: 30ch;
     line-height: 20px;
+    overflow-wrap: break-word;
 }
 
 .left {
