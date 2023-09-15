@@ -73,19 +73,37 @@
 }
 
 .input-btn {
-    /* border: 2px solid red; */
     position: absolute;
-    bottom: 0;
-    width: 2rem;
+    width: 2.25rem;
     cursor: pointer;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    bottom: 50%;
+    transform: translateY(50%);
 }
 
 .right-input-btn {
-    right: 0;
+    right: 2.75%;
 }
 
 .left-input-btn {
-    left: 0;
+    left: 2.75%;
+}
+
+.listening-animation{
+    animation: listening-animation 1000ms ease 0ms infinite alternate;
+}
+
+@keyframes listening-animation {
+    from {
+        background-color: rgb(0, 0, 0, 0);
+    }
+
+    to {
+        background-color: rgb(0, 0, 0, 0.35);
+    }
 }
 
 #send-btn-icon {
