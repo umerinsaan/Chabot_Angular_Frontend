@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ElementRef, AfterViewInit } from '@angular/core';
 import { Message } from 'src/app/models/Message';
 import { ChatbotService } from 'src/app/services/chatbot.service';
 import { SpeechRecognitionService } from 'src/app/services/speech-recognition.service';
@@ -8,49 +8,71 @@ import { SpeechRecognitionService } from 'src/app/services/speech-recognition.se
   templateUrl: './chatbot.component.html',
   styleUrls: ['./chatbot.component.css']
 })
-export class ChatbotComponent {
-  constructor(private speechRecognitionService: SpeechRecognitionService, private ngZone: NgZone, private chatBotService: ChatbotService) { }
+export class ChatbotComponent implements AfterViewInit {
+  constructor(
+    private speechRecognitionService: SpeechRecognitionService,
+    private ngZone: NgZone,
+    private chatBotService: ChatbotService,
+    private elementRef: ElementRef<HTMLDivElement | HTMLTextAreaElement>
+  ) { }
+
+  textAreaElement!: HTMLTextAreaElement;
+  messagesContainer!: HTMLDivElement;
+
+  ngAfterViewInit(): void {
+    this.textAreaElement = this.elementRef.nativeElement.querySelector("#message-input-field") as HTMLTextAreaElement;
+    this.messagesContainer = this.elementRef.nativeElement.querySelector("#messages-container") as HTMLDivElement;
+  }
 
   messages: Message[] = [];
   question: string = '';
 
-  addUserMessage(messagesContainer: HTMLDivElement) {
+  addUserMessage() {
     this.messages.push({
       sender: 'user',
       value: 'Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User.'
     })
+    this.messagesContainerScrollToBottom();
+  }
 
+  messagesContainerScrollToBottom(): void {
     setTimeout(() => {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      console.log(messagesContainer.scrollTop);
-      console.log(messagesContainer.scrollHeight);
+      if (this.messagesContainer) {
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+      }
     }, 0);
   }
 
-  addBotMessage(messagesContainer: HTMLDivElement) {
+  addBotMessage() {
     this.messages.push({
       sender: 'bot',
       value: 'Sample Text From Bot.'
     });
 
-    setTimeout(() => {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      console.log(messagesContainer.scrollTop);
-      console.log(messagesContainer.scrollHeight);
-    }, 0);
+    this.messagesContainerScrollToBottom();
   }
 
-  textAreaResize(element: HTMLTextAreaElement) {
-    const maxHeight = parseInt(getComputedStyle(element).maxHeight, 10);
+  textAreaResize() {
+    if (this.textAreaElement === null || this.textAreaElement === undefined) return;
 
-    element.style.height = "2rem";
-    element.style.height = (element.scrollHeight) + "px";
+    const maxHeight = parseInt(getComputedStyle(this.textAreaElement).maxHeight, 10);
 
-    if (element.scrollHeight > maxHeight) {
-      element.style.overflowY = "auto";
+    this.textAreaElement.style.height = "2rem";
+    this.textAreaElement.style.height = (this.textAreaElement.scrollHeight) + "px";
+
+    if (this.textAreaElement.scrollHeight > maxHeight) {
+      this.textAreaElement.style.overflowY = "auto";
     } else {
-      element.style.overflowY = "hidden";
+      this.textAreaElement.style.overflowY = "hidden";
     }
+  }
+
+  resetTextAreaSize() {
+    if (this.textAreaElement) {
+      this.textAreaElement.style.height = '';
+      this.textAreaElement.style.overflowY = 'hidden';
+    }
+
   }
 
   listening: boolean = false;
@@ -92,6 +114,9 @@ export class ChatbotComponent {
       value: req
     });
 
+    this.resetTextAreaSize();
+    this.messagesContainerScrollToBottom();
+
     this.question = '';
 
     this.chatBotService.sendQuestionAndGetAnswer({
@@ -100,6 +125,7 @@ export class ChatbotComponent {
     }).subscribe({
       next: (response) => {
         this.messages.push(response);
+        this.messagesContainerScrollToBottom();
       },
       error: (err) => {
         console.log(err);
@@ -109,7 +135,6 @@ export class ChatbotComponent {
 
   enterKeyHandler_For_TextAreaElement(event: Event): void {
     event.preventDefault();
-    console.log("HELLLLO");
-
+    this.askQuestion();
   }
 }

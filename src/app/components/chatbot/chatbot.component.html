@@ -21,7 +21,7 @@
         </button>
 
         <textarea #MessageInputField type="text" name="" id="message-input-field" placeholder="Type a text"
-            (input)="textAreaResize(MessageInputField)" [(ngModel)]="question"
+            (input)="textAreaResize()" [(ngModel)]="question"
             (keydown.enter)="enterKeyHandler_For_TextAreaElement($event)"></textarea>
 
         <button class="input-btn right-input-btn" (click)="askQuestion()">
@@ -36,5 +36,5 @@
 
 </div>
 
-<button (click)="addUserMessage(MessagesContainer)">Add User Message</button>
-<button (click)="addBotMessage(MessagesContainer)">Add Bot Message</button>
+<button (click)="addUserMessage()">Add User Message</button>
+<button (click)="addBotMessage()">Add Bot Message</button>
