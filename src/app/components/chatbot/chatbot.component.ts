@@ -31,29 +31,12 @@ export class ChatbotComponent implements AfterViewInit {
 
   loading: boolean = false;
 
-  addUserMessage() {
-    this.messages.push({
-      sender: 'user',
-      value: 'Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User. Sample Text From User.'
-    })
-    this.messagesContainerScrollToBottom();
-  }
-
   messagesContainerScrollToBottom(): void {
     setTimeout(() => {
       if (this.messagesContainer) {
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
       }
     }, 0);
-  }
-
-  addBotMessage() {
-    this.messages.push({
-      sender: 'bot',
-      value: 'Sample Text From Bot.'
-    });
-
-    this.messagesContainerScrollToBottom();
   }
 
   textAreaResize() {
@@ -95,18 +78,21 @@ export class ChatbotComponent implements AfterViewInit {
       (text: string) => {
         this.ngZone.run(() => {
           this.question = text;
-          this.toggleListening();
+          this.stopListening();
+          this.listening = false;
         });
       },
       (error) => {
         console.log(error);
         this.ngZone.run(() => {
-          this.toggleListening();
+          this.stopListening();
+          this.listening = false;
         })
       },
       () => {
         this.ngZone.run(() => {
-          this.toggleListening();
+          this.stopListening();
+          this.listening = false;
         })
       }
     );
@@ -117,6 +103,10 @@ export class ChatbotComponent implements AfterViewInit {
   }
 
   askQuestion() {
+    if (this.listening) {
+      this.stopListening();
+      this.listening = false;
+    }
     if (this.question.length === 0) return;
     this.loading = true;
 
